@@ -9,33 +9,36 @@ var TRACK_ROWS = 15;
 var TRACK_ROAD = 0;
 var TRACK_WALL = 1;
 var TRACK_PLAYERSTART = 2;
+var TRACK_GOAL = 3;
+var TRACK_TREES = 4;
+var TRACK_FLAG = 5;
 
 var TRACK_GAP = 2;
 
-var trackGrid = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,
-                 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 1, 1,
+var trackGrid = [4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 4,
+                 4, 1, 1, 0, 0, 0, 4, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, 1, 4,
+                 1, 1, 0, 0, 0, 0, 0, 0, 0, 3, 2, 0, 0, 0, 0, 0, 0, 0, 1, 1,
                  1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1,
-                 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1,
-                 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1,
-                 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1,
-                 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1,
-                 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1,
-                 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1,
-                 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1,
-                 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1,
+                 1, 0, 0, 0, 1, 1, 4, 4, 4, 4, 4, 4, 4, 4, 1, 1, 0, 0, 0, 1,
+                 1, 0, 0, 1, 1, 4, 1, 1, 1, 1, 1, 1, 4, 4, 4, 1, 1, 0, 0, 1,
+                 1, 0, 0, 1, 4, 1, 1, 0, 0, 0, 0, 1, 1, 4, 4, 4, 1, 0, 0, 1,
+                 1, 0, 0, 1, 4, 1, 0, 0, 0, 0, 0, 0, 1, 4, 4, 4, 1, 0, 0, 1,
+                 1, 0, 0, 1, 4, 1, 0, 0, 5, 0, 0, 0, 1, 4, 4, 4, 1, 0, 0, 1,
+                 1, 0, 0, 1, 4, 1, 0, 0, 1, 1, 0, 0, 1, 4, 4, 1, 1, 0, 0, 1,
+                 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 4, 1, 0, 0, 0, 1,
+                 1, 0, 0, 0, 5, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1,
                  1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
-                 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1,
-                 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+                 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 4,
+                 1, 1, 1, 1, 1, 1, 1, 1, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 4];
                  
 
               
                  
-function isWallAtColRow(col, row) {
+function isObstacleAtColRow(col, row) {
     if (col >= 0 && col < TRACK_COLS &&
         row >= 0 && row < TRACK_ROWS) {        
         var trackIndexUnderCoord = rowColToArrayIndex(col, row);
-        return (trackGrid[trackIndexUnderCoord] === TRACK_WALL);
+        return (trackGrid[trackIndexUnderCoord] !== TRACK_ROAD);
     } else {
         return false;
     }
@@ -50,7 +53,7 @@ function handleCarAndTrack() {
     if (carTrackCol >= 0 && carTrackCol < TRACK_COLS &&
         carTrackRow >= 0 && carTrackRow < TRACK_ROWS) {
             
-        if (isWallAtColRow(carTrackCol, carTrackRow)) {
+        if (isObstacleAtColRow(carTrackCol, carTrackRow)) {
             carX -= Math.cos(carAngle) * carSpeed;
             carY -= Math.sin(carAngle) * carSpeed;
             carSpeed *= -0.5;
@@ -67,11 +70,27 @@ function drawTracks() {
     for (var row = 0; row < TRACK_ROWS; row++) {        
         for (var col = 0; col < TRACK_COLS; col++) {
             var arrayIndex = rowColToArrayIndex(col, row);
-            if (trackGrid[arrayIndex] === TRACK_WALL) {
-                canvasContext.drawImage(wallPic, TRACK_W * col, TRACK_H * row);           
-            } else if (trackGrid[arrayIndex] === TRACK_ROAD) {
-                canvasContext.drawImage(roadPic, TRACK_W * col, TRACK_H * row);                           
+            var typeOfTileHere = trackGrid[arrayIndex];
+            var imageToUse;
+
+            switch(typeOfTileHere) {
+                case TRACK_WALL:
+                    imageToUse = wallPic;
+                    break;
+                case TRACK_ROAD:
+                    imageToUse = roadPic;
+                    break;
+                case TRACK_GOAL:
+                    imageToUse = goalPic;
+                    break;
+                case TRACK_TREES:
+                    imageToUse = treesPic;
+                    break;
+                case TRACK_FLAG:
+                    imageToUse = flagPic;
+                    break;
             }
+            canvasContext.drawImage(imageToUse, TRACK_W * col, TRACK_H * row);
         }
     }
 }
