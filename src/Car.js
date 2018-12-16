@@ -7,6 +7,7 @@ var TRACTION_DRAG = 0.94;
 var DRIVE_POWER = 0.5;
 var BRAKES = 0.2;
 var TURN_RATE = 0.06;
+var MIN_SPEED_TO_TURN = 0.5;
 
 
 function resetCar() {
@@ -30,11 +31,14 @@ function moveCar() {
     if (keyHeld_Reverse) {
         carSpeed -= BRAKES;
     }
-    if (keyHeld_TurnLeft) {
-        carAngle -= TURN_RATE;
-    }
-    if (keyHeld_TurnRight) {
-        carAngle += TURN_RATE;
+
+    if (Math.abs(carSpeed) > MIN_SPEED_TO_TURN) {
+        if (keyHeld_TurnLeft) {
+            carAngle -= TURN_RATE;
+        }
+        if (keyHeld_TurnRight) {
+            carAngle += TURN_RATE;
+        }
     }
     carX += Math.cos(carAngle) * carSpeed;
     carY += Math.sin(carAngle) * carSpeed;

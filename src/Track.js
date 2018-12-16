@@ -16,7 +16,7 @@ var TRACK_FLAG = 5;
 var TRACK_GAP = 2;
 
 var trackGrid = [4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 4,
-                 4, 1, 1, 0, 0, 0, 4, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, 1, 4,
+                 4, 1, 1, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, 1, 4,
                  1, 1, 0, 0, 0, 0, 0, 0, 0, 3, 2, 0, 0, 0, 0, 0, 0, 0, 1, 1,
                  1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1,
                  1, 0, 0, 0, 1, 1, 4, 4, 4, 4, 4, 4, 4, 4, 1, 1, 0, 0, 0, 1,
@@ -67,30 +67,18 @@ function rowColToArrayIndex(col, row) {
 
 
 function drawTracks() {
+    var arrayIndex = 0;
+    var drawTileX = 0;
+    var drawTileY = 0;
     for (var row = 0; row < TRACK_ROWS; row++) {        
         for (var col = 0; col < TRACK_COLS; col++) {
-            var arrayIndex = rowColToArrayIndex(col, row);
             var typeOfTileHere = trackGrid[arrayIndex];
-            var imageToUse;
-
-            switch(typeOfTileHere) {
-                case TRACK_WALL:
-                    imageToUse = wallPic;
-                    break;
-                case TRACK_ROAD:
-                    imageToUse = roadPic;
-                    break;
-                case TRACK_GOAL:
-                    imageToUse = goalPic;
-                    break;
-                case TRACK_TREES:
-                    imageToUse = treesPic;
-                    break;
-                case TRACK_FLAG:
-                    imageToUse = flagPic;
-                    break;
-            }
-            canvasContext.drawImage(imageToUse, TRACK_W * col, TRACK_H * row);
+            var imageToUse = trackPics[typeOfTileHere];
+            canvasContext.drawImage(imageToUse, drawTileX, drawTileY);
+            drawTileX += TRACK_W;
+            arrayIndex++;
         }
+        drawTileX = 0;
+        drawTileY += TRACK_H;
     }
 }
