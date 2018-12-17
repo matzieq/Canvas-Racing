@@ -16,7 +16,7 @@ var TRACK_FLAG = 5;
 var TRACK_GAP = 2;
 
 var trackGrid = [4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 4,
-                 4, 1, 1, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, 1, 4,
+                 4, 1, 1, 0, 0, 0, 0, 0, 0, 3, 2, 0, 0, 0, 0, 0, 0, 1, 1, 4,
                  1, 1, 0, 0, 0, 0, 0, 0, 0, 3, 2, 0, 0, 0, 0, 0, 0, 0, 1, 1,
                  1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1,
                  1, 0, 0, 0, 1, 1, 4, 4, 4, 4, 4, 4, 4, 4, 1, 1, 0, 0, 0, 1,
@@ -45,18 +45,18 @@ function isObstacleAtColRow(col, row) {
 
 } 
 
-function handleCarAndTrack() {  
-    var carTrackCol = Math.floor(carX / TRACK_W);
-    var carTrackRow = Math.floor(carY / TRACK_H);
+function handleCarAndTrack(car) {  
+    var carTrackCol = Math.floor(car.x / TRACK_W);
+    var carTrackRow = Math.floor(car.y / TRACK_H);
     var trackIndexUnderCar = rowColToArrayIndex(carTrackCol, carTrackRow);
     
     if (carTrackCol >= 0 && carTrackCol < TRACK_COLS &&
         carTrackRow >= 0 && carTrackRow < TRACK_ROWS) {
             
         if (isObstacleAtColRow(carTrackCol, carTrackRow)) {
-            carX -= Math.cos(carAngle) * carSpeed;
-            carY -= Math.sin(carAngle) * carSpeed;
-            carSpeed *= -0.5;
+            car.x -= Math.cos(car.angle) * car.speed;
+            car.y -= Math.sin(car.angle) * car.speed;
+            car.speed *= -0.5;
         }
     }
 }
