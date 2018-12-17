@@ -9,9 +9,31 @@ function Car () {
     this.y = 75;
     this.angle = 0;
     this.speed = 0;
+    this.image;
+    this.name = "Untitled Car";
 
+    this.keyHeld_Gas = false;
+    this.keyHeld_Reverse = false;
+    this.keyHeld_TurnRight = false;
+    this.keyHeld_TurnLeft = false;
 
-    this.reset = function () {
+    this.controlKeyUp;
+    this.controlKeyDown;
+    this.controlKeyLeft;
+    this.controlKeyRight;
+
+    this.setupInput = function (upKey, downKey, rightKey, leftKey) {
+        this.controlKeyUp = upKey;
+        this.controlKeyDown = downKey;
+        this.controlKeyLeft = leftKey;
+        this.controlKeyRight = rightKey;
+    }
+
+    this.reset = function (image, name) {
+        this.name = name;
+        this.image = image;
+        this.speed = 0;
+        this.angle = 0;
         for (var row = 0; row < TRACK_ROWS; row++) {        
             for (var col = 0; col < TRACK_COLS; col++) {
                 var arrayIndex = rowColToArrayIndex(col, row);
@@ -27,18 +49,18 @@ function Car () {
 
     this.move = function() {
         this.speed *= TRACTION_DRAG;
-        if (keyHeld_Gas) {
+        if (this.keyHeld_Gas) {
             this.speed += DRIVE_POWER;
         }
-        if (keyHeld_Reverse) {
+        if (this.keyHeld_Reverse) {
             this.speed -= BRAKES;
         }
 
         if (Math.abs(this.speed) > MIN_SPEED_TO_TURN) {
-            if (keyHeld_TurnLeft) {
+            if (this.keyHeld_TurnLeft) {
                 this.angle -= TURN_RATE;
             }
-            if (keyHeld_TurnRight) {
+            if (this.keyHeld_TurnRight) {
                 this.angle += TURN_RATE;
             }
         }
@@ -50,7 +72,7 @@ function Car () {
     }
 
     this.draw = function() {
-        drawBitmapCenteredWithRotation(carPic, this.x , this.y, this.angle);
+        drawBitmapCenteredWithRotation(this.image, this.x , this.y, this.angle);
     }
 
 }

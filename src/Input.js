@@ -6,54 +6,48 @@ var KEY_RIGHT_ARROW = 39;
 var KEY_UP_ARROW = 38;
 var KEY_DOWN_ARROW = 40;
 
-var keyHeld_Gas = false;
-var keyHeld_Reverse = false;
-var keyHeld_TurnRight = false;
-var keyHeld_TurnLeft = false;
+var KEY_W = 87;
+var KEY_A = 65;
+var KEY_S = 83;
+var KEY_D = 68;
+
 
 function setupInput() {
     canvas.addEventListener('mousemove', handleMouse);
     document.addEventListener('keydown', keyPressed);
     document.addEventListener('keyup', keyReleased);
+    blueCar.setupInput(KEY_UP_ARROW, KEY_DOWN_ARROW, KEY_RIGHT_ARROW, KEY_LEFT_ARROW);
+    greenCar.setupInput(KEY_W, KEY_S, KEY_D, KEY_A);
+}
+
+function keySet(event, car, setTo) {
+    if (event.keyCode === car.controlKeyLeft) {
+        car.keyHeld_TurnLeft = setTo;
+    } 
+    
+    if (event.keyCode === car.controlKeyRight) {
+        car.keyHeld_TurnRight = setTo;
+    } 
+    
+    if (event.keyCode === car.controlKeyUp) {
+        car.keyHeld_Gas = setTo;
+    } 
+    
+    if (event.keyCode === car.controlKeyDown) {
+        car.keyHeld_Reverse = setTo;
+    }
 }
 
 function keyPressed(event) {
     // console.log("Keypressed:" + event.keyCode);
-    if (event.keyCode === KEY_LEFT_ARROW) {
-        keyHeld_TurnLeft = true;
-    } 
-    
-    if (event.keyCode === KEY_RIGHT_ARROW) {
-        keyHeld_TurnRight = true;
-    } 
-    
-    if (event.keyCode === KEY_UP_ARROW) {
-        keyHeld_Gas = true;
-    } 
-    
-    if (event.keyCode === KEY_DOWN_ARROW) {
-        keyHeld_Reverse = true;
-    }
-    
+    keySet(event, blueCar, true);
+    keySet(event, greenCar, true);
     event.preventDefault();
 }
 
 function keyReleased(event) {
-    if (event.keyCode === KEY_LEFT_ARROW) {
-        keyHeld_TurnLeft = false;
-    } 
-    
-    if (event.keyCode === KEY_RIGHT_ARROW) {
-        keyHeld_TurnRight = false;
-    } 
-    
-    if (event.keyCode === KEY_UP_ARROW) {
-        keyHeld_Gas = false;
-    } 
-    
-    if (event.keyCode === KEY_DOWN_ARROW) {
-        keyHeld_Reverse = false;
-    }
+    keySet(event, blueCar, false);
+    keySet(event, greenCar, false);
     
     event.preventDefault();
 }
